@@ -35,6 +35,9 @@ gobattle = False
 gocanteen = False
 goeastcor_1 = False
 goeastcor_2 = False
+goclass_1 = False
+goclass_2 = False
+goclass_3 = False
 #---------------------------------------------------------------------------
 
 walkr = [pygame.image.load("sprite/walkr1.png"), pygame.image.load("sprite/walkr2.png"), pygame.image.load("sprite/walkr3.png"),
@@ -423,6 +426,210 @@ def battle():
 
     scrolling()
 #---------------------------------------------------------------------------
+def canteen():
+    """canteen map"""
+    global X
+    global Y
+    global CHECK
+    global RIGHT
+    global LEFT
+    global DOWN
+    global UP
+    global PLAYER_RADIUS
+    global PLAYER_POSITION_X
+    global PLAYER_POSITION_Y
+
+    if keys[pygame.K_ESCAPE]:
+        run = False
+    if keys[pygame.K_a] and X > vel:
+        X -= vel
+        RIGHT = False
+        LEFT = True
+        UP = False
+        DOWN = False
+        CHECK = 'LEFT'
+    elif keys[pygame.K_d]:
+        X += vel
+        RIGHT = True
+        LEFT = False
+        UP = False
+        DOWN = False
+        CHECK = 'RIGHT'
+    elif keys[pygame.K_s]:
+        Y += vel
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = True
+        CHECK = 'DOWN'
+    elif keys[pygame.K_w]:
+        Y -= vel
+        RIGHT = False
+        LEFT = False
+        UP = True
+        DOWN = False
+        CHECK = 'UP'
+    else:
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = False
+
+    scrolling()
+#---------------------------------------------------------------------------
+def eastcor_1():
+    """eastcorridor_1 map"""
+    global X
+    global Y
+    global CHECK
+    global RIGHT
+    global LEFT
+    global DOWN
+    global UP
+    global PLAYER_RADIUS
+    global PLAYER_POSITION_X
+    global PLAYER_POSITION_Y
+
+    if keys[pygame.K_ESCAPE]:
+        run = False
+    if keys[pygame.K_a] and X > vel:
+        X -= vel
+        RIGHT = False
+        LEFT = True
+        UP = False
+        DOWN = False
+        CHECK = 'LEFT'
+    elif keys[pygame.K_d]:
+        X += vel
+        RIGHT = True
+        LEFT = False
+        UP = False
+        DOWN = False
+        CHECK = 'RIGHT'
+    elif keys[pygame.K_s]:
+        Y += vel
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = True
+        CHECK = 'DOWN'
+    elif keys[pygame.K_w]:
+        Y -= vel
+        RIGHT = False
+        LEFT = False
+        UP = True
+        DOWN = False
+        CHECK = 'UP'
+    else:
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = False
+
+    scrolling()
+#---------------------------------------------------------------------------
+def eastcor_2():
+    """eastcorridor_2 map"""
+    global X
+    global Y
+    global CHECK
+    global RIGHT
+    global LEFT
+    global DOWN
+    global UP
+    global PLAYER_RADIUS
+    global PLAYER_POSITION_X
+    global PLAYER_POSITION_Y
+
+    if keys[pygame.K_ESCAPE]:
+        run = False
+    if keys[pygame.K_a] and X > vel:
+        X -= vel
+        RIGHT = False
+        LEFT = True
+        UP = False
+        DOWN = False
+        CHECK = 'LEFT'
+    elif keys[pygame.K_d]:
+        X += vel
+        RIGHT = True
+        LEFT = False
+        UP = False
+        DOWN = False
+        CHECK = 'RIGHT'
+    elif keys[pygame.K_s]:
+        Y += vel
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = True
+        CHECK = 'DOWN'
+    elif keys[pygame.K_w]:
+        Y -= vel
+        RIGHT = False
+        LEFT = False
+        UP = True
+        DOWN = False
+        CHECK = 'UP'
+    else:
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = False
+
+    scrolling()
+#---------------------------------------------------------------------------
+def class_1():
+    """class_1 map"""
+    global X
+    global Y
+    global CHECK
+    global RIGHT
+    global LEFT
+    global DOWN
+    global UP
+    global PLAYER_RADIUS
+    global PLAYER_POSITION_X
+    global PLAYER_POSITION_Y
+
+    if keys[pygame.K_ESCAPE]:
+        run = False
+    if keys[pygame.K_a] and X > vel:
+        X -= vel
+        RIGHT = False
+        LEFT = True
+        UP = False
+        DOWN = False
+        CHECK = 'LEFT'
+    elif keys[pygame.K_d]:
+        X += vel
+        RIGHT = True
+        LEFT = False
+        UP = False
+        DOWN = False
+        CHECK = 'RIGHT'
+    elif keys[pygame.K_s]:
+        Y += vel
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = True
+        CHECK = 'DOWN'
+    elif keys[pygame.K_w]:
+        Y -= vel
+        RIGHT = False
+        LEFT = False
+        UP = True
+        DOWN = False
+        CHECK = 'UP'
+    else:
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = False
+
+    scrolling()
+#---------------------------------------------------------------------------
 """mainloop"""
 while run:
     keys = pygame.key.get_pressed()
@@ -445,11 +652,13 @@ while run:
             gohallway = False
             gopath = True
             gofirstaid = False
+            gocanteen = False
         elif Y <= 13:
             Y = 583
             gohallway = False
             gopath = False
             gofirstaid = True
+            gocanteen = False
         elif X >= 1198:
             bg = pygame.image.load("sprite/canteen.jpg")
             X = 33
@@ -457,12 +666,126 @@ while run:
             gohallway = False
             gopath = False
             gofirstaid = False
+            gocanteen = True
         elif X >= 628:
             win.blit(bg ,(-628, rel_y-bg_height))
         elif Y >= 358:
             win.blit(bg ,(rel_x-bg_width, -358))
         else:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
+#------------------------------------
+    elif gocanteen == True: #CANTEEN
+        pygame.time.delay(50)
+        canteen()
+        rel_x = -X % bg_width
+        rel_y = -Y % bg_height
+        
+        if X >= 1203:
+            X = 43
+            gocanteen = False
+            gohallway = False
+            goeastcor_1 = True
+        if X <= 13 and Y >= 148 and Y <= 163:
+            X = 1168
+            Y += 75
+            gocanteen = False
+            gohallway = True
+            goeastcor_1 = False
+        elif X >= 843 and Y >= 358 and Y <= 508:
+            win.blit(bg ,(-483, -358))
+        elif X >= 483:
+            win.blit(bg ,(-483, rel_y-bg_height))
+        else:
+            win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
+#------------------------------------
+    elif goeastcor_1 == True:
+        bg = pygame.image.load("sprite/Eastcor_1.jpg")
+        eastcor_1()
+        rel_x = -X % bg_width
+        rel_y = -Y % bg_height
+        
+        if X <= 13 and Y >= 298 and Y <= 388:
+            bg = pygame.image.load("sprite/canteen.jpg")
+            X = 1168
+            goeastcor_1 = False
+            goeastcor_2 = False
+            gocanteen = True
+        elif Y >= 298 and Y <= 343 and X >= 1222:
+            X = 28
+            goeastcor_1 = False
+            goclass_1 = True
+        elif Y >= 28 and Y <= 73 and X >= 1222:
+            X = 28
+            Y = 328
+            goeastcor_1 = False
+            goclass_2 = True
+        elif Y <= 13 and X <= 883:
+            Y = 598
+            goeastcor_1 = False
+            goeastcor_2 = True
+            gocanteen = False   
+        elif Y >= 358:
+            win.blit(bg ,(-13, -358))
+        else:
+            win.blit(bg ,(-13, rel_y-bg_height))
+#------------------------------------
+    elif goeastcor_2 == True:
+        bg = pygame.image.load("sprite/Eastcor_2.jpg")
+        eastcor_2()
+        rel_x = -X % bg_width
+        rel_y = -Y % bg_height
+        
+        if X >= 1222:
+            X = 28
+            Y = 313
+            goeastcor_2 = False
+            goclass_3 = True
+        elif Y >= 628:
+            Y = 28
+            goeastcor_2 = False
+            goeastcor_1 = True
+            gobattle = False
+        elif X <= 13:
+            X = 1183
+            Y = 343
+            goeastcor_2 = False
+            goeastcor_1 = False
+            gobattle = True
+        elif Y >= 238:
+            win.blit(bg ,(-13, -237))
+        else:
+            win.blit(bg ,(-13, rel_y-bg_height))
+#------------------------------------
+    elif goclass_1 or goclass_2 or goclass_3:
+        if goclass_1:
+            bg = pygame.image.load("sprite/class_1.jpg")
+        elif goclass_2:
+            bg = pygame.image.load("sprite/class_2.jpg")
+        elif goclass_3:
+            bg = pygame.image.load("sprite/class_3.jpg")
+        class_1()
+        rel_x = -X % bg_width
+        rel_y = -Y % bg_height
+        
+        if X <= 13 and (goclass_1 or goclass_2):
+            if goclass_2:
+                Y = 58
+            X = 1198
+            goclass_1 = False
+            goclass_2 = False
+            goclass_3 = False
+            goeastcor_1 = True
+        if X <= 13 and goclass_3:
+            X = 1198
+            Y = 208
+            goclass_1 = False
+            goclass_2 = False
+            goclass_3 = False
+            goeastcor_2 = True
+        elif X >= 508:
+            win.blit(bg ,(-508, -148))
+        else:
+            win.blit(bg ,(rel_x-bg_width, -148))
 #------------------------------------
     elif gofirstaid == True: #FIRSTAID ROOM
         bg = pygame.image.load("sprite/firstaidroom.jpg")
@@ -501,10 +824,13 @@ while run:
             Y += 120
             gobattle = False
             gofirstaid = True
+            goeastcor_2 = False
         elif X >= 1207:
             X = 28
+            Y = 223
             gobattle = False
-            gofirstaid = False       
+            gofirstaid = False
+            goeastcor_2 = True         
         elif X >= 523 and Y >= 103:
             win.blit(bg ,(-523, -103))
         elif Y >= 103:
@@ -520,9 +846,6 @@ while run:
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
         
-        if X <= 598 and checkwalkx == 0:
-            checkwalkx += 1
-            new_width = rel_x-bg_width
         if X >= 1168:
             X = 28
             Y += 15
