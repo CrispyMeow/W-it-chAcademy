@@ -856,7 +856,7 @@ while run:
             gopath = False
             gomeeting = True
         elif (X <= 598 and Y >= 313) or (X <= 598 and Y < 313):
-            win.blit(bg ,(new_width, -313))
+            win.blit(bg ,(-598, -313))
         elif X >= 1108:
             win.blit(bg ,(-1108, -313))
         elif Y < 313 or Y >= 313:
