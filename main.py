@@ -38,6 +38,9 @@ goeastcor_2 = False
 goclass_1 = False
 goclass_2 = False
 goclass_3 = False
+goeastgarden = False
+gowestgarden = False
+goentry = False
 #---------------------------------------------------------------------------
 
 walkr = [pygame.image.load("sprite/walkr1.png"), pygame.image.load("sprite/walkr2.png"), pygame.image.load("sprite/walkr3.png"),
@@ -212,8 +215,6 @@ def path():
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
 
-    if keys[pygame.K_ESCAPE]:
-        run = False
     if keys[pygame.K_a] and X > vel:
         if (X < 688+30 and Y < 238-15) or ((118 < X < 643+15 or 793 < X < 1093+15) and 237-15 < Y < 297):
             X -= 0
@@ -277,8 +278,6 @@ def meeting():
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
 
-    if keys[pygame.K_ESCAPE]:
-        run = False
     if keys[pygame.K_a] and X > vel:
         if X < 43 or (148-15 < X < 943 and Y < 88):
             X -= 0
@@ -337,8 +336,6 @@ def firstaid():
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
 
-    if keys[pygame.K_ESCAPE]:
-        run = False
     if keys[pygame.K_a] and X > vel:
         X -= vel
         RIGHT = False
@@ -388,8 +385,6 @@ def battle():
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
 
-    if keys[pygame.K_ESCAPE]:
-        run = False
     if keys[pygame.K_a] and X > vel:
         X -= vel
         RIGHT = False
@@ -439,8 +434,6 @@ def canteen():
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
 
-    if keys[pygame.K_ESCAPE]:
-        run = False
     if keys[pygame.K_a] and X > vel:
         X -= vel
         RIGHT = False
@@ -490,8 +483,6 @@ def eastcor_1():
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
 
-    if keys[pygame.K_ESCAPE]:
-        run = False
     if keys[pygame.K_a] and X > vel:
         X -= vel
         RIGHT = False
@@ -541,8 +532,6 @@ def eastcor_2():
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
 
-    if keys[pygame.K_ESCAPE]:
-        run = False
     if keys[pygame.K_a] and X > vel:
         X -= vel
         RIGHT = False
@@ -592,8 +581,104 @@ def class_1():
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
 
-    if keys[pygame.K_ESCAPE]:
-        run = False
+    if keys[pygame.K_a] and X > vel:
+        X -= vel
+        RIGHT = False
+        LEFT = True
+        UP = False
+        DOWN = False
+        CHECK = 'LEFT'
+    elif keys[pygame.K_d]:
+        X += vel
+        RIGHT = True
+        LEFT = False
+        UP = False
+        DOWN = False
+        CHECK = 'RIGHT'
+    elif keys[pygame.K_s]:
+        Y += vel
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = True
+        CHECK = 'DOWN'
+    elif keys[pygame.K_w]:
+        Y -= vel
+        RIGHT = False
+        LEFT = False
+        UP = True
+        DOWN = False
+        CHECK = 'UP'
+    else:
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = False
+
+    scrolling()
+#---------------------------------------------------------------------------
+def eastgar():
+    """class_1 map"""
+    global X
+    global Y
+    global CHECK
+    global RIGHT
+    global LEFT
+    global DOWN
+    global UP
+    global PLAYER_RADIUS
+    global PLAYER_POSITION_X
+    global PLAYER_POSITION_Y
+
+    if keys[pygame.K_a] and X > vel:
+        X -= vel
+        RIGHT = False
+        LEFT = True
+        UP = False
+        DOWN = False
+        CHECK = 'LEFT'
+    elif keys[pygame.K_d]:
+        X += vel
+        RIGHT = True
+        LEFT = False
+        UP = False
+        DOWN = False
+        CHECK = 'RIGHT'
+    elif keys[pygame.K_s]:
+        Y += vel
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = True
+        CHECK = 'DOWN'
+    elif keys[pygame.K_w]:
+        Y -= vel
+        RIGHT = False
+        LEFT = False
+        UP = True
+        DOWN = False
+        CHECK = 'UP'
+    else:
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = False
+
+    scrolling()
+#---------------------------------------------------------------------------
+def entry():
+    """entry hall map"""
+    global X
+    global Y
+    global CHECK
+    global RIGHT
+    global LEFT
+    global DOWN
+    global UP
+    global PLAYER_RADIUS
+    global PLAYER_POSITION_X
+    global PLAYER_POSITION_Y
+
     if keys[pygame.K_a] and X > vel:
         X -= vel
         RIGHT = False
@@ -653,6 +738,11 @@ while run:
             gopath = True
             gofirstaid = False
             gocanteen = False
+        elif Y >= 598:
+            X += 15
+            Y = 47
+            gohallway = False
+            goentry = True
         elif Y <= 13:
             Y = 583
             gohallway = False
@@ -682,14 +772,25 @@ while run:
         
         if X >= 1203:
             X = 43
-            gocanteen = False
             gohallway = False
+            gocanteen = False
+            goeastgar = False
             goeastcor_1 = True
-        if X <= 13 and Y >= 148 and Y <= 163:
+        elif X <= 13 and Y >= 148 and Y <= 163:
             X = 1168
             Y += 75
-            gocanteen = False
             gohallway = True
+            gocanteen = False
+            goeastgar = False
+            goeastcor_1 = False
+        elif Y >= 538 and X >= 843:
+            bg = pygame.image.load("sprite/eastgarden.jpg")
+            stage_wildth = 2100
+            X = 28
+            Y = 388
+            gohallway = False
+            gocanteen = False
+            goeastgarden = True
             goeastcor_1 = False
         elif X >= 843 and Y >= 358 and Y <= 508:
             win.blit(bg ,(-483, -358))
@@ -751,6 +852,7 @@ while run:
             goeastcor_2 = False
             goeastcor_1 = False
             gobattle = True
+            goeastgarden = False
         elif Y >= 238:
             win.blit(bg ,(-13, -237))
         else:
@@ -813,6 +915,24 @@ while run:
         else:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
+    elif goeastgarden:
+        pygame.time.delay(50)
+        eastgar()
+        rel_x = -X % bg_width
+        rel_y = -Y % bg_height
+        
+        if X <= 13 and goeastgarden:
+            bg = pygame.image.load("sprite/canteen.jpg")
+            stage_wildth = 1280
+            X = 723
+            Y = 598
+            goeastgar = False
+            gocanteen = True
+        elif X >= 1783:
+            win.blit(bg ,(-1783, -58))
+        else:
+            win.blit(bg ,(rel_x-bg_width, -58))
+#------------------------------------
     elif gobattle == True: #BATTLE ROOM
         bg = pygame.image.load("sprite/battleroom.jpg")
         battle()
@@ -853,6 +973,7 @@ while run:
             gopath = False
         elif Y <= 13:
             X = 433
+            Y = 553
             gopath = False
             gomeeting = True
         elif (X <= 598 and Y >= 313) or (X <= 598 and Y < 313):
@@ -880,6 +1001,24 @@ while run:
             win.blit(bg ,(-523, rel_y-bg_height))
         elif Y >= 418:
             win.blit(bg ,(rel_x-bg_width, -418))
+        else:
+            win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
+#------------------------------------
+    elif goentry == True:
+        bg = pygame.image.load("sprite/entryhall.jpg")
+        entry()
+        rel_x = -X % bg_width
+        rel_y = -Y % bg_height
+
+        if Y <= 13:
+            X -= 15
+            Y = 568
+            goentry = False
+            gohallway = True
+        elif Y >= 178:
+            win.blit(bg ,(rel_x-bg_width, -178))
+        elif X >= 703:
+            win.blit(bg ,(-703, rel_y-bg_height))
         else:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #---------------------------------------------------------------------------
