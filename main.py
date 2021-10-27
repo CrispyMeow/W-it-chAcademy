@@ -726,7 +726,6 @@ while run:
             run = False
 #------------------------------------
     if gohallway == True: #HALLWAY
-        bg = pygame.image.load("sprite/hallway.jpg")
         hallway()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
@@ -779,6 +778,7 @@ while run:
         elif X <= 13 and Y >= 148 and Y <= 163:
             X = 1168
             Y += 75
+            bg = pygame.image.load("sprite/hallway.jpg")
             gohallway = True
             gocanteen = False
             goeastgar = False
@@ -896,6 +896,7 @@ while run:
         rel_y = -Y % bg_height
 
         if Y >= 613:
+            bg = pygame.image.load("sprite/hallway.jpg")
             Y = 43
             gohallway = True
             gofirstaid = False
@@ -967,6 +968,7 @@ while run:
         rel_y = -Y % bg_height
         
         if X >= 1168:
+            bg = pygame.image.load("sprite/hallway.jpg")
             X = 28
             Y += 15
             gohallway = True
@@ -1011,6 +1013,7 @@ while run:
         rel_y = -Y % bg_height
 
         if Y <= 13:
+            bg = pygame.image.load("sprite/hallway.jpg")
             X -= 15
             Y = 568
             goentry = False
