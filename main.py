@@ -45,6 +45,9 @@ goeastcor = False
 goresearch = False
 goteach = False
 goapothe = False
+gowestfor = False
+goeastfor = False
+goforest = False
 #---------------------------------------------------------------------------
 
 walkr = [pygame.image.load("sprite/walkr1.png"), pygame.image.load("sprite/walkr2.png"), pygame.image.load("sprite/walkr3.png"),
@@ -670,6 +673,104 @@ def eastgar():
 
     scrolling()
 #---------------------------------------------------------------------------
+def eastfor():
+    """east forest map"""
+    global X
+    global Y
+    global CHECK
+    global RIGHT
+    global LEFT
+    global DOWN
+    global UP
+    global PLAYER_RADIUS
+    global PLAYER_POSITION_X
+    global PLAYER_POSITION_Y
+
+    if keys[pygame.K_a] and X > vel:
+        X -= vel
+        RIGHT = False
+        LEFT = True
+        UP = False
+        DOWN = False
+        CHECK = 'LEFT'
+    elif keys[pygame.K_d]:
+        X += vel
+        RIGHT = True
+        LEFT = False
+        UP = False
+        DOWN = False
+        CHECK = 'RIGHT'
+    elif keys[pygame.K_s]:
+        Y += vel
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = True
+        CHECK = 'DOWN'
+    elif keys[pygame.K_w]:
+        Y -= vel
+        RIGHT = False
+        LEFT = False
+        UP = True
+        DOWN = False
+        CHECK = 'UP'
+    else:
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = False
+
+    scrolling()
+#---------------------------------------------------------------------------
+def forest():
+    """forest map"""
+    global X
+    global Y
+    global CHECK
+    global RIGHT
+    global LEFT
+    global DOWN
+    global UP
+    global PLAYER_RADIUS
+    global PLAYER_POSITION_X
+    global PLAYER_POSITION_Y
+
+    if keys[pygame.K_a] and X > vel:
+        X -= vel
+        RIGHT = False
+        LEFT = True
+        UP = False
+        DOWN = False
+        CHECK = 'LEFT'
+    elif keys[pygame.K_d]:
+        X += vel
+        RIGHT = True
+        LEFT = False
+        UP = False
+        DOWN = False
+        CHECK = 'RIGHT'
+    elif keys[pygame.K_s]:
+        Y += vel
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = True
+        CHECK = 'DOWN'
+    elif keys[pygame.K_w]:
+        Y -= vel
+        RIGHT = False
+        LEFT = False
+        UP = True
+        DOWN = False
+        CHECK = 'UP'
+    else:
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = False
+
+    scrolling()
+#---------------------------------------------------------------------------
 def research():
     """research room map"""
     global X
@@ -866,6 +967,55 @@ def westgar():
 
     scrolling()
 #---------------------------------------------------------------------------
+def westfor():
+    """west forest map"""
+    global X
+    global Y
+    global CHECK
+    global RIGHT
+    global LEFT
+    global DOWN
+    global UP
+    global PLAYER_RADIUS
+    global PLAYER_POSITION_X
+    global PLAYER_POSITION_Y
+
+    if keys[pygame.K_a] and X > vel:
+        X -= vel
+        RIGHT = False
+        LEFT = True
+        UP = False
+        DOWN = False
+        CHECK = 'LEFT'
+    elif keys[pygame.K_d]:
+        X += vel
+        RIGHT = True
+        LEFT = False
+        UP = False
+        DOWN = False
+        CHECK = 'RIGHT'
+    elif keys[pygame.K_s]:
+        Y += vel
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = True
+        CHECK = 'DOWN'
+    elif keys[pygame.K_w]:
+        Y -= vel
+        RIGHT = False
+        LEFT = False
+        UP = True
+        DOWN = False
+        CHECK = 'UP'
+    else:
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = False
+
+    scrolling()
+#---------------------------------------------------------------------------
 def entry():
     """entry hall map"""
     global X
@@ -983,14 +1133,14 @@ while run:
         if X == 13 and Y >= 328 and Y <= 388:
             bg = pygame.image.load("sprite/Path.jpg")
             X = 1123
-            Y -= 15
+            Y = 343
             gohallway = False
             gopath = True
             gofirstaid = False
             gocanteen = False
         elif Y >= 598:
             bg = pygame.image.load("sprite/entryhall.jpg")
-            X -= 90-30-15-30-15-30-15
+            X = 508
             Y = 47
             gohallway = False
             goentry = True
@@ -1002,7 +1152,6 @@ while run:
             gofirstaid = True
             gocanteen = False
         elif X >= 1198:
-            stage_height += 500
             bg = pygame.image.load("sprite/canteen.jpg")
             X = 33
             Y = 163
@@ -1023,23 +1172,34 @@ while run:
         rel_y = -Y % bg_height
         
         if X >= 1203:
-            bg = pygame.image.load("sprite/eastcorridor.jpg")
             X = 28
-            Y = 838
-            stage_height -= 500
-            stage_height += 300
+            Y = 703
+            stage_height = 950
+            bg = pygame.image.load("sprite/eastcorridor.jpg")
             gocanteen = False
             goeastcor = True
+        elif Y >= 778 and Y <= 838 and X >= 828:
+            X = 28
+            Y = 223
+            stage_height = 720
+            bg = pygame.image.load("sprite/eastgarden.jpg")
+            gocanteen = False
+            goeastgar = True
         elif X <= 13 and Y >= 148 and Y <= 163:
             X = 1168
-            Y += 75
-            stage_height -= 500
+            Y = 238
+            stage_height = 720
             bg = pygame.image.load("sprite/hallway.jpg")
             gohallway = True
             gocanteen = False
+        elif X >= 838 and Y >= 283:
+            stage_height = 720
+            win.blit(bg ,(-453, -283))
         elif X >= 453:
+            stage_height = 950
             win.blit(bg ,(-453, rel_y-bg_height))
         else:
+            stage_height = 950
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
     elif goeastcor == True:
@@ -1047,81 +1207,60 @@ while run:
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
         
-        if X <= 13 and Y >= 743 and Y <= 883:
+        if X <= 13 and Y >= 628 and Y <= 808:
+            stage_height = 950
             bg = pygame.image.load("sprite/canteen.jpg")
-            stage_height -= 300
-            stage_height += 500
-            X = 1138+5
-            Y = 388-90+30+30
+            X = 1198
+            Y = 478
             goeastcor = False
             gocanteen = True
-        elif X <= 13 and Y >= 238 and Y <= 313:
+        elif X <= 13 and Y >= 148 and Y <= 223:
+            stage_height = 720
             bg = pygame.image.load("sprite/battleroom.jpg")
-            X = 1183
-            Y = 343
-            stage_height -= 300
+            X = 1207
+            Y = 358
             goeastcor = False
             gobattle = True
-        elif X >= 1213 and Y >= 148 and Y <= 253:
-            bg = pygame.image.load("sprite/classroom.jpg")
-            X = 28
-            Y = 343
-            stage_height -= 300
+        elif Y <= 13:
+            stage_height = 720
+            bg = pygame.image.load("sprite/eastforest.jpg")
+            X = 1123
+            Y = 613
             goeastcor = False
-            goclass_1 = True
-        elif X >= 1213 and Y >= 448 and Y <= 658:
-            bg = pygame.image.load("sprite/classroom.jpg")
-            X = 28
-            Y = 343
-            stage_height -= 300
+            goeastfor = True
+        elif Y >= 853:
+            stage_height = 720
+            bg = pygame.image.load("sprite/eastgarden.jpg")
+            X = 388
+            Y = 28
             goeastcor = False
-            goclass_2 = True
-        elif X >= 1213 and Y >= 793 and Y <= 898:
-            bg = pygame.image.load("sprite/classroom.jpg")
-            X = 28
-            Y = 343
-            stage_height -= 300
-            goeastcor = False
-            goclass_3 = True
-        elif Y >= 943:
-            win.blit(bg ,(-33, -943))
+            goeastgar = True
+        elif Y >= 703:
+            win.blit(bg ,(-20, -703))
         else:
-            win.blit(bg ,(-33, rel_y-bg_height))
+            win.blit(bg ,(-20, rel_y-bg_height))
 #------------------------------------
-    elif goclass_1 or goclass_2 or goclass_3:
-        if goclass_1:
-            classroom()
-            if X <= 13:
-                X = 1198
-                Y = 208
-                stage_height += 300
-                bg = pygame.image.load("sprite/eastcorridor.jpg")
-                goclass_1 = False
-                goeastcor = True
-            else:
-                win.blit(bg ,(-238, -118))
-        elif goclass_2:
-            classroom()
-            if X <= 13:
-                X = 1198
-                Y = 568
-                stage_height += 300
-                bg = pygame.image.load("sprite/eastcorridor.jpg")
-                goclass_2 = False
-                goeastcor = True
-            else:
-                win.blit(bg ,(-238, -118))
-        elif goclass_3:
-            classroom()
-            if X <= 13:
-                X = 1198
-                Y = 868
-                stage_height += 300
-                bg = pygame.image.load("sprite/eastcorridor.jpg")
-                goclass_3 = False
-                goeastcor = True
-            else:
-                win.blit(bg ,(-238, -118))
+    elif goeastgar == True:
+        eastgar()
+        rel_x = -X % bg_width
+        rel_y = -Y % bg_height
+
+        if X <= 13:
+            stage_height = 950
+            bg = pygame.image.load("sprite/canteen.jpg")
+            X = 813
+            Y = 823
+            goeastgar = False
+            gocanteen = True
+        elif Y <= 13:
+            stage_height = 950
+            bg = pygame.image.load("sprite/eastcorridor.jpg")
+            X = 448
+            Y = 838
+            goeastgar = False
+            goeastcor = True
+        else:
+            win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
     elif gofirstaid == True: #FIRSTAID ROOM
         firstaid()
@@ -1136,8 +1275,8 @@ while run:
             gobattle = False
         elif X >= 1207:
             bg = pygame.image.load("sprite/battleroom.jpg")
-            X = 43
-            Y -= 120
+            X = 28
+            Y = 373
             gohallway = False
             gofirstaid = False
             gobattle = True
@@ -1158,17 +1297,16 @@ while run:
         if X <= 13:
             bg = pygame.image.load("sprite/firstaidroom.jpg")
             X = 1168
-            Y += 120
+            Y = 493
             gobattle = False
             gofirstaid = True
-            goeastcor_2 = False
-        elif X >= 1207:
+        elif X >= 1222:
+            stage_height = 950
             bg = pygame.image.load("sprite/eastcorridor.jpg")
-            stage_height += 300
             X = 28
-            Y = 283
+            Y = 193
             gobattle = False
-            goeastcor = True         
+            goeastcor = True
         elif X >= 523 and Y >= 103:
             win.blit(bg ,(-523, -103))
         elif Y >= 103:
@@ -1186,14 +1324,14 @@ while run:
         if X >= 1168:
             bg = pygame.image.load("sprite/hallway.jpg")
             X = 28
-            Y += 15
+            Y = 358
             gohallway = True
             gopath = False
         elif X <= 13:
+            stage_height = 950
             bg = pygame.image.load("sprite/westcorridor.jpg")
-            X = 1198
-            Y = 853
-            stage_height += 300
+            X = 1183
+            Y = 748
             gopath = False
             gowestcor = True
         elif Y <= 13:
@@ -1218,8 +1356,8 @@ while run:
             bg = pygame.image.load("sprite/path.jpg")
             gomeeting = False
             gopath = True
-            X += 300
-            Y = 43
+            X = 733
+            Y = 28
         elif X >= 523 and Y >= 418:
             win.blit(bg ,(-523, -418))
         elif X >= 523:
@@ -1241,8 +1379,8 @@ while run:
             gohalls = True
         elif Y <= 13:
             bg = pygame.image.load("sprite/hallway.jpg")
-            X -= 90-30-15
-            Y = 553
+            X = 463
+            Y = 583
             goentry = False
             gohallway = True
         elif X >= 763 and Y >= 287:
@@ -1261,7 +1399,7 @@ while run:
 
         if X <= 13:
             bg = pygame.image.load("sprite/westgarden.jpg")
-            X = 1117
+            X = 1123
             gohalls = False
             gowestgar = True
         elif X >= 1207:
@@ -1278,103 +1416,125 @@ while run:
         else:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
-    elif gowestgar:
+    elif gowestgar == True:
         westgar()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
-        if Y <= 13:
-            X = 607
-            Y = 898
-            bg = pygame.image.load("sprite/westcorridor.jpg")
-            gowestgar = False
-            gowestcor = True
-            stage_height += 300
-        elif X >= 1207:
+        if X >= 1207:
+            stage_height = 720
             bg = pygame.image.load("sprite/halls.jpg")
-            X = 67
+            X = 73
             gowestgar = False
             gohalls = True
-        
-        win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
+        elif Y <= 13:
+            stage_height = 950
+            bg = pygame.image.load("sprite/westcorridor.jpg")
+            X = 748
+            Y = 823
+            gowestgar = False
+            gowestcor = True
+        else:
+            win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
-    elif gowestcor:
+    elif gowestcor == True:
         westcor()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
-        if X >= 1207:
-            bg = pygame.image.load("sprite/path.jpg")
-            stage_height -= 300
-            X = 28
-            Y = 358
-            gowestcor = False
-            gopath = True
-        elif Y >= 913:
+        if Y >= 853:
+            stage_height = 720
             bg = pygame.image.load("sprite/westgarden.jpg")
-            stage_height -= 300
-            X = 832
-            Y = 62
+            X = 838
+            Y = 28
             gowestcor = False
             gowestgar = True
-        elif Y >= 148 and Y <= 253 and X <= 13:
-            X = 1183
-            Y = 373
-            bg = pygame.image.load("sprite/researchroom.jpg")
-            stage_height -= 300
-            goresearch = True
+        elif Y <= 13:
+            stage_height = 720
+            bg = pygame.image.load("sprite/westforest.jpg")
+            X = 43
+            Y = 598
             gowestcor = False
-        elif Y >= 433 and Y <= 628 and X <= 13:
-            X = 1183
-            Y = 328
-            bg = pygame.image.load("sprite/teacherroom.jpg")
-            stage_height -= 300
-            goteach = True
+            gowestfor = True
+        elif X >= 1213:
+            stage_height = 720
+            bg = pygame.image.load("sprite/path.jpg")
+            X = 28
+            Y = 343
             gowestcor = False
-        elif Y >= 778 and Y <= 883 and X <= 13:
-            X = 1183
-            Y = 373
-            bg = pygame.image.load("sprite/apothecaryroom.jpg")
-            stage_height -= 300
-            goapothe = True
-            gowestcor = False
+            gopath = True
+        elif Y >= 718:
+            win.blit(bg ,(-28, -718))
         else:
-            win.blit(bg ,(-13, rel_y-bg_height))
+            win.blit(bg ,(-28, rel_y-bg_height))
 #------------------------------------
-    elif goresearch or goteach or goapothe:
-        if goresearch:
-            research()
-            if X >= 1198:
-                X = 28
-                Y = 208
-                stage_height += 300
-                bg = pygame.image.load("sprite/westcorridor.jpg")
-                goresearch = False
-                gowestcor = True
-            else:
-                win.blit(bg ,(-238, -118))
-        elif goteach:
-            teachroom()
-            if X >= 1198:
-                X = 28
-                Y = 538
-                stage_height += 300
-                bg = pygame.image.load("sprite/westcorridor.jpg")
-                goteach = False
-                gowestcor = True
-            else:
-                win.blit(bg ,(-238, -118))
-        elif goapothe:
-            apothe()
-            if X >= 1198:
-                X = 28
-                Y = 838
-                stage_height += 300
-                bg = pygame.image.load("sprite/westcorridor.jpg")
-                goapothe = False
-                gowestcor = True
-            else:
-                win.blit(bg ,(-238, -118))
+    elif gowestfor == True:
+        westfor()
+        rel_x = -X % bg_width
+        rel_y = -Y % bg_height
+
+        if Y >= 628:
+            stage_height = 950
+            bg = pygame.image.load("sprite/westcorridor.jpg")
+            gowestfor = False
+            gowestcor = True
+            X = 598
+            Y = 28
+        elif X >= 1213:
+            bg = pygame.image.load("sprite/forest.jpg")
+            X = 28
+            gowestfor = False
+            goforest = True
+        elif X >= 583:
+            win.blit(bg ,(-583, -58))
+        else:
+            win.blit(bg ,(rel_x-bg_width, -58))
+#------------------------------------
+    elif goforest == True:
+        forest()
+        rel_x = -X % bg_width
+        rel_y = -Y % bg_height
+
+        if X <= 13:
+            bg = pygame.image.load("sprite/westforest.jpg")
+            X = 1198
+            goforest = False
+            gowestfor = True
+        elif X >= 1213:
+            bg = pygame.image.load("sprite/eastforest.jpg")
+            X = 28
+            goforest = False
+            goeastfor = True
+        elif X >= 523 and Y >= 425:
+            win.blit(bg ,(-523, -425))
+        elif X >= 523:
+            win.blit(bg ,(-523, rel_y-bg_height))
+        elif Y >= 425:
+            win.blit(bg ,(rel_x-bg_width, -425))
+        else:
+            win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
+#------------------------------------
+    elif goeastfor == True:
+        eastfor()
+        rel_x = -X % bg_width
+        rel_y = -Y % bg_height
+
+        if X <= 13:
+            bg = pygame.image.load("sprite/forest.jpg")
+            X = 1198
+            goeastfor = False
+            goforest = True
+        elif Y >= 628:
+            stage_height = 950
+            bg = pygame.image.load("sprite/eastcorridor.jpg")
+            X = 598
+            Y = 28
+            goeastfor = False
+            goeastcor = True
+        elif X >= 583:
+            win.blit(bg ,(-583, -58))
+        else:
+            win.blit(bg ,(rel_x-bg_width, -58))
 #---------------------------------------------------------------------------
     
     print(X, Y)
