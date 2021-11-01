@@ -24,14 +24,14 @@ start_scrolling_y = height/2
 stage_height = 720
 stage_position_y = 0
 
-X, Y, vel, WALKCOUNT, CHECK = 598, 617, 15, 0, 'UP'
+X, Y, vel, WALKCOUNT, CHECK = 598, 613, 15, 0, 'UP'
 MONCOUNT, MONSTER_POSITION_X, MONSTER_POSITION_Y = 0, 242, 242
 hp, fight = 50, False
 
 run = True
 LEFT, RIGHT = False, False
 DOWN, UP = False, False
-gosecretfor = True
+gosecretfor, dead = True, False
 
 #---------------------------------------------------------------------------
 
@@ -50,6 +50,10 @@ walkd = [pygame.image.load("sprite/walkd1.png"), pygame.image.load("sprite/walkd
 walku = [pygame.image.load("sprite/walku1.png"), pygame.image.load("sprite/walku2.png"), pygame.image.load("sprite/walku3.png"),
         pygame.image.load("sprite/walku4.png"), pygame.image.load("sprite/walku5.png"), pygame.image.load("sprite/walku6.png"),
         pygame.image.load("sprite/walku7.png"), pygame.image.load("sprite/walku8.png"), pygame.image.load("sprite/walku9.png")]
+
+deadimage = [pygame.image.load("sprite/dead1.png"), pygame.image.load("sprite/dead2.png"), pygame.image.load("sprite/dead3.png"),
+        pygame.image.load("sprite/dead4.png"), pygame.image.load("sprite/dead5.png"), pygame.image.load("sprite/dead6.png"),
+             pygame.image.load("sprite/dead7.png"), pygame.image.load("sprite/dead8.png"), pygame.image.load("sprite/dead9.png")]
 
 yellow = [pygame.image.load("sprite/monster/yellow1.png"), pygame.image.load("sprite/monster/yellow2.png"), pygame.image.load("sprite/monster/yellow3.png"),
          pygame.image.load("sprite/monster/yellow4.png"), pygame.image.load("sprite/monster/yellow5.png"), pygame.image.load("sprite/monster/yellow6.png"),
@@ -71,6 +75,25 @@ for i in range(9):
     damagewalku = pygame.transform.scale(damagewalku, (int(width*0.07), int(height*0.13)))
     
 #---------------------------------------------------------------------------
+def fade(width, height): 
+    fade = pygame.Surface((width, height))
+    fade.fill((0,0,0))
+    for alpha in range(0, 300):
+        fade.set_alpha(alpha)
+        redrawDead()
+        win.blit(fade, (0,0))
+        pygame.display.update()
+        pygame.time.delay(5)
+#---------------------------------------------------------------------------
+def redrawDead():
+    """blit the main character dead"""
+    global WALKCOUNT
+    if WALKCOUNT >= 9:
+        win.blit(deadimage[8], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
+    else:
+        win.blit(deadimage[WALKCOUNT], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
+    WALKCOUNT += 1
+#---------------------------------------------------------------------------
 def redrawGameWindow():
     """blit the main character"""
     global WALKCOUNT
@@ -79,7 +102,7 @@ def redrawGameWindow():
     global MONSTER_POSITION_X
     global MONSTER_POSITION_Y
 
-    if WALKCOUNT + 1 >= 9: #กัน out of range
+    if WALKCOUNT + 1 >= 9 and dead != True: #กัน out of range
         WALKCOUNT = 0
 
     if RIGHT:
@@ -107,9 +130,9 @@ def redrawGameWindow():
             win.blit(walkd[0], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
         elif CHECK == 'UP':
             win.blit(walku[0], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
-            
+
     if -15 <= MONSTER_POSITION_Y-PLAYER_POSITION_Y <= 60 and \
-       abs(MONSTER_POSITION_X-PLAYER_POSITION_X) <= 19:
+       abs(MONSTER_POSITION_X-PLAYER_POSITION_X) <= 19 and fight == True:
         if CHECK == 'RIGHT':
             win.blit(damagewalkr, (PLAYER_POSITION_X, PLAYER_POSITION_Y))
         elif CHECK == 'LEFT':
@@ -118,7 +141,6 @@ def redrawGameWindow():
             win.blit(damagewalkd, (PLAYER_POSITION_X, PLAYER_POSITION_Y))
         elif CHECK == 'UP':
             win.blit(damagewalku, (PLAYER_POSITION_X, PLAYER_POSITION_Y))
-            
 #---------------------------------------------------------------------------
 def redrawMonster():
     """blit monster"""
@@ -190,28 +212,28 @@ def secretfor():
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
 
-    if keys[pygame.K_a] and X > vel:
+    if keys[pygame.K_a] and X > vel and dead == False:
         X -= vel
         RIGHT = False
         LEFT = True
         UP = False
         DOWN = False
         CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
+    elif keys[pygame.K_d] and dead == False:
         X += vel
         RIGHT = True
         LEFT = False
         UP = False
         DOWN = False
         CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
+    elif keys[pygame.K_s] and dead == False:
         Y += vel
         RIGHT = False
         LEFT = False
         UP = False
         DOWN = True
         CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
+    elif keys[pygame.K_w] and dead == False:
         Y -= vel
         RIGHT = False
         LEFT = False
@@ -254,20 +276,37 @@ while run:
 #     print('MONSTER', MONSTER_POSITION_X, MONSTER_POSITION_Y)
 
     if fight:
-        if MONSTER_POSITION_Y-PLAYER_POSITION_Y <= 26:
+        if MONSTER_POSITION_Y-PLAYER_POSITION_Y <= 30:
             redrawMonster()
             redrawGameWindow()
         else:
             redrawGameWindow()
             redrawMonster()
+            
+        pygame.draw.rect(win, (250-(hp*5), hp*5, 0), [390, 40, hp*10, 15])
+
+    elif dead:
+        redrawDead()
+        if WALKCOUNT == 15:
+            fade(1280, 720)
+            dead = False
     else:
         redrawGameWindow()
 
+#---------------------------------------------------------------------------
+
     if gosecretfor:
         win.blit(fog ,(-238, rel_y-bg_height))
+
     if -15 <= MONSTER_POSITION_Y-PLAYER_POSITION_Y <= 60 and \
-       abs(MONSTER_POSITION_X-PLAYER_POSITION_X) <= 19: #ฝั่งลบ มอนสูงกว่าคน
-        hp -= 0.5
+       abs(MONSTER_POSITION_X-PLAYER_POSITION_X) <= 19 and fight == True: #ฝั่งลบ มอนสูงกว่าคน
+        if hp <= 0:
+            hp, WALKCOUNT = 50, 0
+            MONSTER_POSITION_X, MONSTER_POSITION_Y = 242, 242
+            fight = False
+            dead = True
+        else:
+            hp -= 0.5
 
     print(hp)
     pygame.display.update()
