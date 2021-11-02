@@ -52,23 +52,23 @@ goapothe = False
 gowestfor = False
 goeastfor = False
 goforest = False
+
 #---------------------------------------------------------------------------
+def readvariable(string):
+    """readline variable"""
+    f, mylist = open('variable.txt', 'r'), []
+    while True:
+        s = f.readline()
+        if s == '':
+            break
+        d = s.split()
+        if d[0].count(string) == 1:
+            mylist.append(pygame.image.load(d[0]))
+    f.close()
+    return mylist
 
-walkr = [pygame.image.load("sprite/walkr1.png"), pygame.image.load("sprite/walkr2.png"), pygame.image.load("sprite/walkr3.png"),
-        pygame.image.load("sprite/walkr4.png"), pygame.image.load("sprite/walkr5.png"), pygame.image.load("sprite/walkr6.png"),
-        pygame.image.load("sprite/walkr7.png"), pygame.image.load("sprite/walkr8.png"), pygame.image.load("sprite/walkr9.png")]
-
-walkl = [pygame.image.load("sprite/walkl1.png"), pygame.image.load("sprite/walkl2.png"), pygame.image.load("sprite/walkl3.png"),
-        pygame.image.load("sprite/walkl4.png"), pygame.image.load("sprite/walkl5.png"), pygame.image.load("sprite/walkl6.png"),
-        pygame.image.load("sprite/walkl7.png"), pygame.image.load("sprite/walkl8.png"), pygame.image.load("sprite/walkl9.png")]
-
-walkd = [pygame.image.load("sprite/walkd1.png"), pygame.image.load("sprite/walkd2.png"), pygame.image.load("sprite/walkd3.png"),
-        pygame.image.load("sprite/walkd4.png"), pygame.image.load("sprite/walkd5.png"), pygame.image.load("sprite/walkd6.png"),
-        pygame.image.load("sprite/walkd7.png"), pygame.image.load("sprite/walkd8.png"), pygame.image.load("sprite/walkd9.png")]
-
-walku = [pygame.image.load("sprite/walku1.png"), pygame.image.load("sprite/walku2.png"), pygame.image.load("sprite/walku3.png"),
-        pygame.image.load("sprite/walku4.png"), pygame.image.load("sprite/walku5.png"), pygame.image.load("sprite/walku6.png"),
-        pygame.image.load("sprite/walku7.png"), pygame.image.load("sprite/walku8.png"), pygame.image.load("sprite/walku9.png")]
+walkr, walkl = readvariable('walkr'), readvariable('walkl')
+walkd, walku = readvariable('walkd'), readvariable('walku')
 
 for i in range(9):
     walkr[i] = pygame.transform.scale(walkr[i], (int(width*0.07), int(height*0.13)))
