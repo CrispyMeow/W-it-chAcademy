@@ -373,7 +373,7 @@ while run:
             hp_player -= 0.5
 
     if abs((MAGIC_POSITION_X+50)-YELLOW_POS_X) <= 50 and \
-       abs(MAGIC_POSITION_Y-YELLOW_POS_Y) <= 70:
+       abs(MAGIC_POSITION_Y-YELLOW_POS_Y) <= 100:
         hp_yellow -= 2
         if hp_yellow < 0:
             COUNTYEL = 0
