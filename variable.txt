@@ -34,26 +34,3 @@ sprite/walku6.png
 sprite/walku7.png
 sprite/walku8.png
 sprite/walku9.png
-gohallway = True
-gopath = False
-gomeeting = False
-gofirstaid = False
-gobattle = False
-gocanteen = False
-goclass_1 = False
-goclass_2 = False
-goclass_3 = False
-gowestgar = False
-goeastgar = False
-goentry = False
-gohalls = False
-gowestcor_1 = False
-gowestcor_2 = False
-goeastcor_1 = False
-goeastcor_2 = False
-goresearch = False
-goteach = False
-goapothe = False
-gowestfor = False
-goeastfor = False
-goforest = False
