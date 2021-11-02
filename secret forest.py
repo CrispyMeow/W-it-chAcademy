@@ -1,4 +1,5 @@
 import pygame
+pygame.init()
 
 #---------------------------------------------------------------------------
 """set variable"""
@@ -25,39 +26,39 @@ stage_height = 720
 stage_position_y = 0
 
 X, Y, vel, WALKCOUNT, CHECK = 598, 613, 15, 0, 'UP'
-MONCOUNT, MONSTER_POSITION_X, MONSTER_POSITION_Y = 0, 242, 242
-hp, fight = 50, False
+COUNTYEL, YELLOW_POS_X, YELLOW_POS_Y = 0, 242, 242
+MAGIC_POSITION_X, MAGIC_POSITION_Y = 0, 0
+hp_player, fight, MAGICCOUNT = 50, False, 0
+hp_yellow = 65
+yellowdead = False
 
 run = True
 LEFT, RIGHT = False, False
-DOWN, UP = False, False
-gosecretfor, dead = True, False
+DOWN, UP, CIRCLE = False, False, False
+gosecretfor, gameover = True, False
+
+#music = pygame.mixer.Sound("testbg.mp3")
+magicsound = pygame.mixer.Sound("sprite/magic/magicsound.mp3")
 
 #---------------------------------------------------------------------------
+def readvar(file, string):
+    """readline variable"""
+    f, mylist = open(file, 'r'), []
+    while True:
+        s = f.readline()
+        if s == '':
+            break
+        d = s.split()
+        if d[0].count(string) == 1:
+            mylist.append(pygame.image.load(d[0]))
+    return mylist
 
-walkr = [pygame.image.load("sprite/walkr1.png"), pygame.image.load("sprite/walkr2.png"), pygame.image.load("sprite/walkr3.png"),
-        pygame.image.load("sprite/walkr4.png"), pygame.image.load("sprite/walkr5.png"), pygame.image.load("sprite/walkr6.png"),
-        pygame.image.load("sprite/walkr7.png"), pygame.image.load("sprite/walkr8.png"), pygame.image.load("sprite/walkr9.png")]
-
-walkl = [pygame.image.load("sprite/walkl1.png"), pygame.image.load("sprite/walkl2.png"), pygame.image.load("sprite/walkl3.png"),
-        pygame.image.load("sprite/walkl4.png"), pygame.image.load("sprite/walkl5.png"), pygame.image.load("sprite/walkl6.png"),
-        pygame.image.load("sprite/walkl7.png"), pygame.image.load("sprite/walkl8.png"), pygame.image.load("sprite/walkl9.png")]
-
-walkd = [pygame.image.load("sprite/walkd1.png"), pygame.image.load("sprite/walkd2.png"), pygame.image.load("sprite/walkd3.png"),
-        pygame.image.load("sprite/walkd4.png"), pygame.image.load("sprite/walkd5.png"), pygame.image.load("sprite/walkd6.png"),
-        pygame.image.load("sprite/walkd7.png"), pygame.image.load("sprite/walkd8.png"), pygame.image.load("sprite/walkd9.png")]
-
-walku = [pygame.image.load("sprite/walku1.png"), pygame.image.load("sprite/walku2.png"), pygame.image.load("sprite/walku3.png"),
-        pygame.image.load("sprite/walku4.png"), pygame.image.load("sprite/walku5.png"), pygame.image.load("sprite/walku6.png"),
-        pygame.image.load("sprite/walku7.png"), pygame.image.load("sprite/walku8.png"), pygame.image.load("sprite/walku9.png")]
-
-deadimage = [pygame.image.load("sprite/dead1.png"), pygame.image.load("sprite/dead2.png"), pygame.image.load("sprite/dead3.png"),
-        pygame.image.load("sprite/dead4.png"), pygame.image.load("sprite/dead5.png"), pygame.image.load("sprite/dead6.png"),
-             pygame.image.load("sprite/dead7.png"), pygame.image.load("sprite/dead8.png"), pygame.image.load("sprite/dead9.png")]
-
-yellow = [pygame.image.load("sprite/monster/yellow1.png"), pygame.image.load("sprite/monster/yellow2.png"), pygame.image.load("sprite/monster/yellow3.png"),
-         pygame.image.load("sprite/monster/yellow4.png"), pygame.image.load("sprite/monster/yellow5.png"), pygame.image.load("sprite/monster/yellow6.png"),
-         pygame.image.load("sprite/monster/yellow7.png"), pygame.image.load("sprite/monster/yellow8.png"), pygame.image.load("sprite/monster/yellow9.png")]
+walkr, walkl = readvar('var.txt', 'walkr'), readvar('var.txt', 'walkl')
+walkd, walku = readvar('var.txt', 'walkd'), readvar('var.txt', 'walku')
+rspell, lspell = readvar('var.txt', 'rspell'), readvar('var.txt', 'lspell')
+dspell, uspell = readvar('var.txt', 'dspell'), readvar('var.txt', 'uspell')
+magic, deadplayer = readvar('var.txt', 'circle'), readvar('var.txt', 'dead')
+yellow, deadyellow = readvar('monvar.txt', '/yellow'), readvar('monvar.txt', 'deadyellow')
 
 damagewalkr = pygame.image.load("sprite/damage taken/walkr1.png")
 damagewalkl = pygame.image.load("sprite/damage taken/walkl1.png")
@@ -73,25 +74,62 @@ for i in range(9):
     damagewalkl = pygame.transform.scale(damagewalkl, (int(width*0.07), int(height*0.13)))
     damagewalkd = pygame.transform.scale(damagewalkd, (int(width*0.07), int(height*0.13)))
     damagewalku = pygame.transform.scale(damagewalku, (int(width*0.07), int(height*0.13)))
-    
+    rspell[i] = pygame.transform.scale(rspell[i], (int(width*0.07), int(height*0.13)))
+    lspell[i] = pygame.transform.scale(lspell[i], (int(width*0.07), int(height*0.13)))
+
 #---------------------------------------------------------------------------
-def fade(width, height): 
-    fade = pygame.Surface((width, height))
+def fadescreen():
+    """blit fade screen"""
+    fade = pygame.Surface((1280, 720))
     fade.fill((0,0,0))
     for alpha in range(0, 300):
         fade.set_alpha(alpha)
-        redrawDead()
+        if gameover:
+            redrawDead()
+        elif gameover == False:
+            redrawGameWindow()
         win.blit(fade, (0,0))
         pygame.display.update()
         pygame.time.delay(5)
+#---------------------------------------------------------------------------
+def redrawMagic():
+    """blit magic"""
+    global MAGICCOUNT
+    global WALKCOUNT
+    global CIRCLE
+    global MAGIC_POSITION_X
+    global MAGIC_POSITION_Y
+
+    if MAGICCOUNT + 1 >= 17:
+        MAGICCOUNT, WALKCOUNT = 0, 0
+        MAGIC_POSITION_X , MAGIC_POSITION_Y = 0, 0
+        CIRCLE = False
+    elif MAGICCOUNT < 17:
+        if CHECK == 'RIGHT':
+            MAGIC_POSITION_X = PLAYER_POSITION_X+125
+            MAGIC_POSITION_Y = PLAYER_POSITION_Y-30
+            win.blit(magic[MAGICCOUNT], (MAGIC_POSITION_X, MAGIC_POSITION_Y))
+        elif CHECK == 'LEFT':
+            MAGIC_POSITION_X = PLAYER_POSITION_X-235
+            MAGIC_POSITION_Y = PLAYER_POSITION_Y-30
+            win.blit(magic[MAGICCOUNT], (MAGIC_POSITION_X, MAGIC_POSITION_Y))
+        elif CHECK == 'UP':
+            MAGIC_POSITION_X = PLAYER_POSITION_X-55
+            MAGIC_POSITION_Y = PLAYER_POSITION_Y-200
+            win.blit(magic[MAGICCOUNT], (MAGIC_POSITION_X, MAGIC_POSITION_Y))
+        elif CHECK == 'DOWN':
+            MAGIC_POSITION_X = PLAYER_POSITION_X-55
+            MAGIC_POSITION_Y = PLAYER_POSITION_Y+100
+            win.blit(magic[MAGICCOUNT], (MAGIC_POSITION_X, MAGIC_POSITION_Y))
+    MAGICCOUNT += 1
 #---------------------------------------------------------------------------
 def redrawDead():
     """blit the main character dead"""
     global WALKCOUNT
     if WALKCOUNT >= 9:
-        win.blit(deadimage[8], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
+        win.blit(deadplayer[8], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
     else:
-        win.blit(deadimage[WALKCOUNT], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
+        win.blit(deadplayer[WALKCOUNT], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
     WALKCOUNT += 1
 #---------------------------------------------------------------------------
 def redrawGameWindow():
@@ -99,26 +137,39 @@ def redrawGameWindow():
     global WALKCOUNT
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
-    global MONSTER_POSITION_X
-    global MONSTER_POSITION_Y
+    global YELLOW_POS_X
+    global YELLOW_POS_Y
 
-    if WALKCOUNT + 1 >= 9 and dead != True: #กัน out of range
+    if WALKCOUNT + 1 >= 9 and gameover != True and CIRCLE != True: #กัน out of range
         WALKCOUNT = 0
 
-    if RIGHT:
+    if RIGHT and CIRCLE == False:
         win.blit(walkr[WALKCOUNT], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
         WALKCOUNT += 1
 
-    elif LEFT:
+    elif LEFT and CIRCLE == False:
         win.blit(walkl[WALKCOUNT], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
         WALKCOUNT += 1
 
-    elif DOWN:
+    elif DOWN and CIRCLE == False:
         win.blit(walkd[WALKCOUNT], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
         WALKCOUNT += 1
 
-    elif UP:
+    elif UP and CIRCLE == False:
         win.blit(walku[WALKCOUNT], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
+        WALKCOUNT += 1
+
+    elif CIRCLE:
+        if WALKCOUNT >= 9:
+            WALKCOUNT = 8
+        if CHECK == 'RIGHT':
+            win.blit(rspell[WALKCOUNT], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
+        elif CHECK == 'LEFT':
+            win.blit(lspell[WALKCOUNT], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
+        elif CHECK == 'DOWN':
+            win.blit(dspell[WALKCOUNT], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
+        elif CHECK == 'UP':
+            win.blit(uspell[WALKCOUNT], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
         WALKCOUNT += 1
 
     elif RIGHT == False and LEFT == False and DOWN == False and UP == False:
@@ -131,8 +182,8 @@ def redrawGameWindow():
         elif CHECK == 'UP':
             win.blit(walku[0], (PLAYER_POSITION_X, PLAYER_POSITION_Y))
 
-    if -15 <= MONSTER_POSITION_Y-PLAYER_POSITION_Y <= 60 and \
-       abs(MONSTER_POSITION_X-PLAYER_POSITION_X) <= 19 and fight == True:
+    if -15 <= YELLOW_POS_Y-PLAYER_POSITION_Y <= 60 and yellowdead == False and\
+       abs(YELLOW_POS_X-PLAYER_POSITION_X) <= 19 and fight == True and CIRCLE == False:
         if CHECK == 'RIGHT':
             win.blit(damagewalkr, (PLAYER_POSITION_X, PLAYER_POSITION_Y))
         elif CHECK == 'LEFT':
@@ -144,25 +195,31 @@ def redrawGameWindow():
 #---------------------------------------------------------------------------
 def redrawMonster():
     """blit monster"""
-    global MONCOUNT
-    global MONSTER_POSITION_X
-    global MONSTER_POSITION_Y
+    global COUNTYEL
+    global YELLOW_POS_X
+    global YELLOW_POS_Y
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
     
-    if MONCOUNT + 1 >= 9: #กัน out of range
-        MONCOUNT = 0
-    if MONSTER_POSITION_X >= PLAYER_POSITION_X+15:
-        MONSTER_POSITION_X -= 5
-    if MONSTER_POSITION_X <= PLAYER_POSITION_X+15:
-        MONSTER_POSITION_X += 5
-    if MONSTER_POSITION_Y >= PLAYER_POSITION_Y+25:
-        MONSTER_POSITION_Y -= 5
-    if MONSTER_POSITION_Y <= PLAYER_POSITION_Y+50:
-        MONSTER_POSITION_Y += 5
-
-    win.blit(yellow[MONCOUNT], (MONSTER_POSITION_X, MONSTER_POSITION_Y))
-    MONCOUNT += 1
+    if yellowdead == False:
+        if COUNTYEL + 1 >= 9: #กัน out of range
+            COUNTYEL = 0
+        if YELLOW_POS_X >= PLAYER_POSITION_X+15:
+            YELLOW_POS_X -= 5
+        if YELLOW_POS_X <= PLAYER_POSITION_X+15:
+            YELLOW_POS_X += 5
+        if YELLOW_POS_Y >= PLAYER_POSITION_Y+25:
+            YELLOW_POS_Y -= 5
+        if YELLOW_POS_Y <= PLAYER_POSITION_Y+50:
+            YELLOW_POS_Y += 5
+        win.blit(yellow[COUNTYEL], (YELLOW_POS_X, YELLOW_POS_Y))
+    elif yellowdead:
+        if COUNTYEL <= 8:
+            pygame.time.delay(10)
+            win.blit(deadyellow[COUNTYEL], (YELLOW_POS_X, YELLOW_POS_Y))
+        else:
+            YELLOW_POS_X, YELLOW_POS_Y = 242, 242
+    COUNTYEL += 1
 #---------------------------------------------------------------------------
 def scrolling():
     """scrolling background"""
@@ -208,32 +265,38 @@ def secretfor():
     global LEFT
     global DOWN
     global UP
+    global CIRCLE
+    global WALKCOUNT
     global PLAYER_RADIUS
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
 
-    if keys[pygame.K_a] and X > vel and dead == False:
+    if keys[pygame.K_SPACE] and gameover == False and fight == True and CIRCLE == False:
+        CIRCLE = True
+        pygame.mixer.Sound.play(magicsound)
+        WALKCOUNT = 0
+    elif keys[pygame.K_a] and X > vel and gameover == False and CIRCLE == False:
         X -= vel
         RIGHT = False
         LEFT = True
         UP = False
         DOWN = False
         CHECK = 'LEFT'
-    elif keys[pygame.K_d] and dead == False:
+    elif keys[pygame.K_d] and gameover == False and CIRCLE == False:
         X += vel
         RIGHT = True
         LEFT = False
         UP = False
         DOWN = False
         CHECK = 'RIGHT'
-    elif keys[pygame.K_s] and dead == False:
+    elif keys[pygame.K_s] and gameover == False and CIRCLE == False:
         Y += vel
         RIGHT = False
         LEFT = False
         UP = False
         DOWN = True
         CHECK = 'DOWN'
-    elif keys[pygame.K_w] and dead == False:
+    elif keys[pygame.K_w] and gameover == False and CIRCLE == False:
         Y -= vel
         RIGHT = False
         LEFT = False
@@ -245,13 +308,12 @@ def secretfor():
         LEFT = False
         UP = False
         DOWN = False
-
     scrolling()
 #---------------------------------------------------------------------------
 """mainloop"""
 while run:
+    pygame.time.delay(25)
     keys = pygame.key.get_pressed()
-    pygame.time.delay(30)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -263,33 +325,34 @@ while run:
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
-        if Y <= 257:
+        if Y <= 253:
             fight = True
         if Y >= 662:
             win.blit(bg ,(-238, -662))
         else:
             win.blit(bg ,(-238, rel_y-bg_height))
 #---------------------------------------------------------------------------
-    
+
 #     print(X, Y)
 #     print('PLAYER', PLAYER_POSITION_X, PLAYER_POSITION_Y)
-#     print('MONSTER', MONSTER_POSITION_X, MONSTER_POSITION_Y)
+#     print('MONSTER', YELLOW_POS_X, YELLOW_POS_Y)
 
-    if fight:
-        if MONSTER_POSITION_Y-PLAYER_POSITION_Y <= 30:
+    if fight and gameover == False:
+        if CIRCLE:
+            redrawMagic()
+        if YELLOW_POS_Y-PLAYER_POSITION_Y <= 30:
             redrawMonster()
             redrawGameWindow()
         else:
             redrawGameWindow()
             redrawMonster()
-            
-        pygame.draw.rect(win, (250-(hp*5), hp*5, 0), [390, 40, hp*10, 15])
-
-    elif dead:
+        pygame.draw.rect(win, (250-(hp_player*5), hp_player*5, 0), [390, 40, hp_player*10, 15])
+        
+    elif gameover:
         redrawDead()
         if WALKCOUNT == 15:
-            fade(1280, 720)
-            dead = False
+            fadescreen()
+            gameover = False
     else:
         redrawGameWindow()
 
@@ -298,17 +361,24 @@ while run:
     if gosecretfor:
         win.blit(fog ,(-238, rel_y-bg_height))
 
-    if -15 <= MONSTER_POSITION_Y-PLAYER_POSITION_Y <= 60 and \
-       abs(MONSTER_POSITION_X-PLAYER_POSITION_X) <= 19 and fight == True: #ฝั่งลบ มอนสูงกว่าคน
-        if hp <= 0:
-            hp, WALKCOUNT = 50, 0
-            MONSTER_POSITION_X, MONSTER_POSITION_Y = 242, 242
+    if -15 <= YELLOW_POS_Y-PLAYER_POSITION_Y <= 60 and yellowdead == False and \
+       abs(YELLOW_POS_X-PLAYER_POSITION_X) <= 19 and fight == True: #ฝั่งลบ มอนสูงกว่าคน
+        if hp_player <= 0:
+            hp_player, WALKCOUNT = 50, 0
+            YELLOW_POS_X, YELLOW_POS_Y = 242, 242
             fight = False
-            dead = True
+            gameover = True
+            CIRCLE = False
         else:
-            hp -= 0.5
+            hp_player -= 0.5
 
-    print(hp)
+    if abs((MAGIC_POSITION_X+50)-YELLOW_POS_X) <= 50 and \
+       abs(MAGIC_POSITION_Y-YELLOW_POS_Y) <= 70:
+        hp_yellow -= 2
+        if hp_yellow < 0:
+            COUNTYEL = 0
+            yellowdead = True
+
     pygame.display.update()
 
 pygame.quit()
