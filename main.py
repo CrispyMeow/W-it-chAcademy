@@ -10,7 +10,6 @@ bg = pygame.image.load("sprite/hallway.jpg")
 bg_width, bg_height = bg.get_rect().size
 #icon = pygame.image.load("sprite/icongame.png")
 #pygame.display.set_icon(icon)
-
 PLAYER_RADIUS = 13
 PLAYER_POSITION_X = PLAYER_RADIUS-10
 PLAYER_POSITION_Y = 25
@@ -24,6 +23,9 @@ stage_height = 720
 stage_position_y = 0
 
 X, Y, vel, WALKCOUNT, CHECK = 448, 238, 15, 0, 'DOWN'
+
+mainClock = pygame.time.Clock()
+
 run = True
 LEFT, RIGHT = False, False
 DOWN, UP = False, False
@@ -55,9 +57,9 @@ goeastfor = False
 goforest = False
 
 #---------------------------------------------------------------------------
-def readvariable(string):
+def readvar(file, string):
     """readline variable"""
-    f, mylist = open('variable.txt', 'r'), []
+    f, mylist = open(file, 'r'), []
     while True:
         s = f.readline()
         if s == '':
@@ -67,8 +69,9 @@ def readvariable(string):
             mylist.append(pygame.image.load(d[0]))
     return mylist
 
-walkr, walkl = readvariable('walkr'), readvariable('walkl')
-walkd, walku = readvariable('walkd'), readvariable('walku')
+walkr, walkl = readvar('var.txt', 'walkr'), readvar('var.txt', 'walkl')
+walkd, walku = readvar('var.txt', 'walkd'), readvar('var.txt', 'walku')
+sup01 = readvar('support.txt', 'sup01')
 
 for i in range(9):
     walkr[i] = pygame.transform.scale(walkr[i], (int(width*0.07), int(height*0.13)))
@@ -1117,19 +1120,57 @@ def halls():
         DOWN = False
 
     scrolling()
+    pygame.display.update()
+#---------------------------------------------------------------------------
+
+SUP_POS_X = 958
+SUP_POS_Y = 237
+SUPCOUNT = 0
+mapping = [pygame.image.load("sprite/hallway.jpg")]
+
+SUP_L = True
+SUP_R = False
+
+def redrawsup():
+    """blit support character"""
+    global bg
+    global SUP_POS_X
+    global SUP_POS_Y
+    global SUPCOUNT
+    global SUP_L
+    global SUP_R
+
+    if SUP_L:
+        if SUPCOUNT + 1 >= 9:
+            SUPCOUNT = 0
+        SUP_POS_X -= 7.5
+        bg.blit(sup01[SUPCOUNT], (SUP_POS_X, SUP_POS_Y))
+    if SUP_POS_X == 58.0:
+        SUPCOUNT = 9
+        SUP_L = False
+        SUP_R = True
+    if SUP_R:
+        if SUPCOUNT + 1 >= 19:
+            SUPCOUNT = 9
+        SUP_POS_X += 7.5
+        bg.blit(sup01[SUPCOUNT], (SUP_POS_X, SUP_POS_Y))
+    if SUP_POS_X == 965.5:
+        SUP_R = False
+        SUP_L = True
+    SUPCOUNT += 1
 #---------------------------------------------------------------------------
 """mainloop"""
 while run:
+    pygame.time.delay(30)
     keys = pygame.key.get_pressed()
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
         if keys[pygame.K_ESCAPE]:
             run = False
 #------------------------------------
-    pygame.time.delay(45)
     if gohallway == True: #HALLWAY
+        redrawsup()
         hallway()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
@@ -1165,10 +1206,13 @@ while run:
             gocanteen = True
         elif X >= 628:
             win.blit(bg ,(-628, rel_y-bg_height))
+            bg.blit(mapping[0], (0, 0))
         elif Y >= 358:
             win.blit(bg ,(rel_x-bg_width, -358))
+            bg.blit(mapping[0], (0, 0))
         else:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
+            bg.blit(mapping[0], (0, 0))
 #------------------------------------
     elif gocanteen == True: #CANTEEN
         canteen()
@@ -1398,12 +1442,12 @@ while run:
             Y = 583
             goentry = False
             gohallway = True
-        elif X >= 763 and Y >= 287:
-            win.blit(bg ,(-763, -287))
+        elif X >= 763 and Y >= 272:
+            win.blit(bg ,(-763, -272))
         elif X >= 763:
             win.blit(bg ,(-763, rel_y-bg_height))
-        elif Y >= 287:
-            win.blit(bg ,(rel_x-bg_width, -287))
+        elif Y >= 272:
+            win.blit(bg ,(rel_x-bg_width, -272))
         else:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
