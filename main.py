@@ -6,7 +6,7 @@ width = 1280
 height = 720
 win = pygame.display.set_mode((width, height))
 pygame.display.set_caption("W <it> CH AcademY")
-bg = pygame.image.load("sprite/hallway.jpg")
+bg = pygame.image.load("sprite/meetingroom.jpg")
 bg_width, bg_height = bg.get_rect().size
 #icon = pygame.image.load("sprite/icongame.png")
 #pygame.display.set_icon(icon)
@@ -30,9 +30,9 @@ run = True
 LEFT, RIGHT = False, False
 DOWN, UP = False, False
 
-gohallway = True
+gohallway = False
 gopath = False
-gomeeting = False
+gomeeting = True
 gofirstaid = False
 gobattle = False
 gocanteen = False
@@ -71,7 +71,7 @@ def readvar(file, string):
 
 walkr, walkl = readvar('var.txt', 'walkr'), readvar('var.txt', 'walkl')
 walkd, walku = readvar('var.txt', 'walkd'), readvar('var.txt', 'walku')
-sup01 = readvar('support.txt', 'sup01')
+#sup01 = readvar('support.txt', 'sup01')
 
 for i in range(9):
     walkr[i] = pygame.transform.scale(walkr[i], (int(width*0.07), int(height*0.13)))
@@ -147,980 +147,7 @@ def scrolling():
 #         PLAYER_POSITION_Y = start_scrolling_y
 #         stage_position_y += -vel
 #---------------------------------------------------------------------------
-def hallway():
-    """hallway map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
 
-    if keys[pygame.K_a] and X > vel:
-        if ((X < 238 or X > 283) and Y < 103+15) or (X < 418 and 133 < Y < 282) or (Y < 118 and ( 28 < X < 118-15 or 118 < X < 208 or 312 < X < 418 or 403 < X < 493+15))\
-            or (Y < 202 and (493+15 < X < 538+15)) or (Y > 253 and (493+15 < X < 538+15)) or (133 < Y < 295 and ( X < 43+15 or 43+15 < X < 103+15 or 163 < X < 253 or 283+15 < X < 343+15 or 343+15 < X < 418))\
-            or ((118+15 < Y < 208 or 238+15 < Y < 328) and (523 < X < 808+15 or 823 < X < 1199+15)) or (178 < X < 223+15 and 298-15 < Y <328) or (Y > 373+15 and X < 433+15) :
-            X -= 0
-        else:
-            X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        if (X > 1183) or ((X > 268 or X < 222) and Y < 103+15) or (Y < 118 and ( 13 < X < 103+15 or 103 < X < 208 or 313-15 < X < 403 or 403-15 < X < 493+15))\
-            or (Y < 202 and (493-15 < X < 538)) or (Y > 253 and (493-15 < X < 538)) or (133 < Y < 295 and ( X < 43 or 43 < X < 103 or 133 < X < 238 or 283-15 < X < 343 or 343-15 < X < 403))\
-            or ((118+15 < Y < 208 or 238+15 < Y < 328) and (523-15 < X < 808+15 or 823-15 < X < 1183-30)) or (178-15 < X < 223 and 298-15 < Y < 328) \
-            or (X > 1183-15 and (Y < 208 or Y > 253)):
-            X += 0
-        else:
-            X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        if (Y > 583) or (118 < Y < 268) and (12 < X < 388+15) or (Y > 253-15 and (493 < X < 538)) or (Y > 373 and X < 433) or (Y > 328 and 523 < X < 1199)\
-            or ((118 < Y < 208 or 238 < Y < 328) and (523 < X < 808 or 823 < X < 1199)):
-            Y += 0
-        else:
-            Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        if (Y < 118 and (X < 222-15 or X > 283+15)) or ((133 < Y < 284) and (12 < X < 388+15)) or (Y < 133 and ( 13 <= X < 103 or 118-15 < X < 193+30 or 313-30 < X < 403 or 403 < X < 493+15))\
-            or (Y < 217 and (493 < X < 538)) or (133 < Y < 298+15 and ( X < 43 or 43+15 < X < 103 or 148 < X < 238 or 283 < X < 343 or 343 < X < 403))\
-            or (Y < 133 and 523 < X < 1199) or ((118+15 < Y < 208+15 or 238+15 < Y < 328+15) and (523 < X < 808 or 823 < X <= 1198)) or (178 < X < 223 and 298-15 < Y < 328+15):
-            Y -= 0
-        else:
-            Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-        
-    scrolling()
-#---------------------------------------------------------------------------
-def path():
-    """path map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        if (X < 688+30 and Y < 238-15) or ((118 < X < 643+15 or 793 < X < 1093+15) and 237-15 < Y < 297):
-            X -= 0
-        else:
-            X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        if ( X > 763-30 and Y < 238-15) or ((118-15 < X < 643 or 793 < X < 1093) and 237-15 < Y < 297):
-            X += 0
-        elif X >= 1153 and Y >= 223 and Y <= 298:
-            X += 0
-        else:
-            X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        if Y >= 388:
-            Y += 0
-        else:
-            Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        if (X < 688+15 and Y < 238) or ( X > 763-15 and Y < 238) or ((118 < X < 643 or 793+15 < X < 1093) and 237 < Y < 297+15):
-            Y -= 0
-        else:
-            Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def meeting():
-    """meetingroom map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        if X < 43 or (148-15 < X < 943 and Y < 88):
-            X -= 0
-        else:
-            X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        if X > 1153-15 or (148-15 < X < 943 and Y < 88) or (Y < 103+15 and X > 913-15) or (Y < 133+15 and X > 1033-15):
-            X += 0
-        else:
-            X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        if (Y < 88+15) or (Y < 103+30 and X > 913) or (Y < 133+30 and X > 1033):
-            Y -= 0
-        else:
-            Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def firstaid():
-    """firstaidroom map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def battle():
-    """battleroom map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def canteen():
-    """canteen map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def eastcor():
-    """eastcorridor map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def westcor():
-    """west corridor map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def classroom():
-    """classroom map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def eastgar():
-    """east garden map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def eastfor():
-    """east forest map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def forest():
-    """forest map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def research():
-    """research room map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def teachroom():
-    """teacher room map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def apothe():
-    """apothecary room map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def westgar():
-    """west garden map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def westfor():
-    """west forest map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def entry():
-    """entry hall map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-#---------------------------------------------------------------------------
-def halls():
-    """hall (small) map"""
-    global X
-    global Y
-    global CHECK
-    global RIGHT
-    global LEFT
-    global DOWN
-    global UP
-    global PLAYER_RADIUS
-    global PLAYER_POSITION_X
-    global PLAYER_POSITION_Y
-
-    if keys[pygame.K_a] and X > vel:
-        X -= vel
-        RIGHT = False
-        LEFT = True
-        UP = False
-        DOWN = False
-        CHECK = 'LEFT'
-    elif keys[pygame.K_d]:
-        X += vel
-        RIGHT = True
-        LEFT = False
-        UP = False
-        DOWN = False
-        CHECK = 'RIGHT'
-    elif keys[pygame.K_s]:
-        Y += vel
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = True
-        CHECK = 'DOWN'
-    elif keys[pygame.K_w]:
-        Y -= vel
-        RIGHT = False
-        LEFT = False
-        UP = True
-        DOWN = False
-        CHECK = 'UP'
-    else:
-        RIGHT = False
-        LEFT = False
-        UP = False
-        DOWN = False
-
-    scrolling()
-    pygame.display.update()
 #---------------------------------------------------------------------------
 
 SUP_POS_X = 958
@@ -1131,33 +158,113 @@ mapping = [pygame.image.load("sprite/hallway.jpg")]
 SUP_L = True
 SUP_R = False
 
-def redrawsup():
-    """blit support character"""
-    global bg
-    global SUP_POS_X
-    global SUP_POS_Y
-    global SUPCOUNT
-    global SUP_L
-    global SUP_R
+# def redrawsup():
+#     """blit support character"""
+#     global bg
+#     global SUP_POS_X
+#     global SUP_POS_Y
+#     global SUPCOUNT
+#     global SUP_L
+#     global SUP_R
 
-    if SUP_L:
-        if SUPCOUNT + 1 >= 9:
-            SUPCOUNT = 0
-        SUP_POS_X -= 7.5
-        bg.blit(sup01[SUPCOUNT], (SUP_POS_X, SUP_POS_Y))
-    if SUP_POS_X == 58.0:
-        SUPCOUNT = 9
-        SUP_L = False
-        SUP_R = True
-    if SUP_R:
-        if SUPCOUNT + 1 >= 19:
-            SUPCOUNT = 9
-        SUP_POS_X += 7.5
-        bg.blit(sup01[SUPCOUNT], (SUP_POS_X, SUP_POS_Y))
-    if SUP_POS_X == 965.5:
-        SUP_R = False
-        SUP_L = True
-    SUPCOUNT += 1
+#     if SUP_L:
+#         if SUPCOUNT + 1 >= 9:
+#             SUPCOUNT = 0
+#         SUP_POS_X -= 7.5
+#         bg.blit(sup01[SUPCOUNT], (SUP_POS_X, SUP_POS_Y))
+#     if SUP_POS_X == 58.0:
+#         SUPCOUNT = 9
+#         SUP_L = False
+#         SUP_R = True
+#     if SUP_R:
+#         if SUPCOUNT + 1 >= 19:
+#             SUPCOUNT = 9
+#         SUP_POS_X += 7.5
+#         bg.blit(sup01[SUPCOUNT], (SUP_POS_X, SUP_POS_Y))
+#     if SUP_POS_X == 965.5:
+#         SUP_R = False
+#         SUP_L = True
+#     SUPCOUNT += 1
+#---------------------------------------------------------------------------
+def wall(wall=[(0,0,0,0)]):
+    """wall"""
+    global X
+    global Y
+    global CHECK
+    global RIGHT
+    global LEFT
+    global DOWN
+    global UP
+    global PLAYER_RADIUS
+    global PLAYER_POSITION_X
+    global PLAYER_POSITION_Y
+    if keys[pygame.K_a] and X > vel:
+        for i,j,k,l in wall:
+            print(i,j,k,l)
+            print(X, Y)
+            if i < X < j and k < Y < l-15:
+                adam = 0
+                break
+            else:
+                adam = vel
+        X -= adam
+        RIGHT = False
+        LEFT = True
+        UP = False
+        DOWN = False
+        CHECK = 'LEFT'
+    elif keys[pygame.K_d]:
+        for i,j,k,l in wall:
+            print(i,j,k,l)
+            print(X,Y)
+            if i-15 < X < j-15 and k < Y < l-15:
+                adam = 0
+                break
+            else:
+                adam = vel
+        X += adam
+        RIGHT = True
+        LEFT = False
+        UP = False
+        DOWN = False
+        CHECK = 'RIGHT'
+    elif keys[pygame.K_s]:
+        for i,j,k,l in wall:
+            print(i,j,k,l)
+            print(X,Y)
+            if i < X < j-15 and k-15 < Y < l-15:
+                adam = 0
+                break
+            else:
+                adam = vel
+        Y += adam
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = True
+        CHECK = 'DOWN'
+    elif keys[pygame.K_w]:
+        for i,j,k,l in wall:
+            print(i,j,k,l)
+            print(X,Y)
+            if i < X < j-15 and k < Y < l:
+                adam = 0
+                break
+            else:
+                adam = vel
+        Y -= adam
+        RIGHT = False
+        LEFT = False
+        UP = True
+        DOWN = False
+        CHECK = 'UP'
+    else:
+        RIGHT = False
+        LEFT = False
+        UP = False
+        DOWN = False
+
+    scrolling()
 #---------------------------------------------------------------------------
 """mainloop"""
 while run:
@@ -1170,8 +277,14 @@ while run:
             run = False
 #------------------------------------
     if gohallway == True: #HALLWAY
-        redrawsup()
-        hallway()
+        # redrawsup()
+        hall_way = [(0,223,0,103),(283,1280,0,103),(493,553,0,223),(538,1280,0,133),\
+            (1168,1280,0,223),(808,1280,133,223),(493,808,133,223),(493,808,253,343),\
+            (823,1280,253,343),(1168,1280,253,720),(493,1280,343,720),(493,553,253,720)\
+            ,(0,418,133,283),(0,28,0,343),(0,448,388,720),(0,118,0,133),(103,238,0,133),\
+            (283,418,0,133),(403,720,0,133),(343,418,253,313),(283,358,253,313),(148,253,253,313),\
+            (183,223,253,343),(58,118,253,313),(0,58,253,313)]
+        wall(hall_way)
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1215,7 +328,7 @@ while run:
             bg.blit(mapping[0], (0, 0))
 #------------------------------------
     elif gocanteen == True: #CANTEEN
-        canteen()
+        wall()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
         
@@ -1251,7 +364,7 @@ while run:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
     elif goeastcor_1 == True:
-        eastcor()
+        wall()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1278,7 +391,7 @@ while run:
             win.blit(bg ,(-28, rel_y-bg_height))
 #------------------------------------
     elif goeastcor_2 == True:
-        eastcor()
+        wall()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1303,7 +416,7 @@ while run:
             win.blit(bg ,(-28, -13))
 #------------------------------------
     elif goeastgar == True:
-        eastgar()
+        wall()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1324,7 +437,11 @@ while run:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
     elif gofirstaid == True: #FIRSTAID ROOM
-        firstaid()
+        wallfirstaid = [(0,1280,0,178), (0,43,0,720), (0,238,583,720), (298,1280,583,720), (1153,1280,0,418), (1153,1280,523,720), (268,343,0,433), (568,643,0,433), \
+        (0,118,343,433), (178,418,343,433,), (478,598,343,433), (28,88,0,298), (88,148,0,298), (148,208,0,298), (208,268,0,298), (328,388,0,298), (388,448,0,298), (448,508,0,298), (508,568,0,298), \
+        (0,238,523,720), (463,913,523,720), (28,118,478,553), (148,238,478,553), (478,568,478,553), (598,688,478,553), (748,898,478,553), \
+        (613,673,0,388), (643,733,0,253), (643,688,0,358), (733,1280,0,238)]
+        wall(wallfirstaid)
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1351,7 +468,8 @@ while run:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
     elif gobattle == True: #BATTLE ROOM
-        battle()
+        wallbattle = [(0,43,0,313), (0,43,463,720), (0,1280,0,88), (0,1280,568,720), (1153,1280,0,253), (1153,1280,403,720), (43,1108,103,553)]
+        wall(wallbattle)
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
         
@@ -1377,7 +495,8 @@ while run:
             win.blit(bg ,(rel_x-bg_width, -103))
 #------------------------------------
     elif gopath == True:
-        path()
+        wall_path = [(0, 718, 0, 238), (748, 1280, 0, 238), (118, 658, 222, 297), (808, 1108, 222, 297), (0, 1280, 388, 1280)]
+        wall(wall_path)
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
         
@@ -1407,7 +526,10 @@ while run:
             win.blit(bg ,(rel_x-bg_width, -313))
 #------------------------------------
     elif gomeeting == True: #MEETING ROOM
-        meeting()
+        meeting_wall = [(0,1280,0,103),(913,1280,0,133),(1033,1280,0,163),(1153,1280,0,720),(448,1280,568,720),(0,418,568,720),(0,43,0,720),(0,148,0,88),(0,163,0,133),(0,103,0,163),(298,388,103,148),(298,388,133,193)
+                        ,(388,478,103,148),(388,493,133,198),(478,598,103,148),(478,613,133,198),(73,1063,193,253),(73,133,193,268),(973,1063,193,268),(1138,1280,193,268),(508,898,253,298),(508,898,283,328),(508,898,313,358)
+                        ,(508,898,343,388),(508,898,373,418),(508,898,403,478),(508,898,463,538),(148,358,253,298),(148,358,283,328),(148,358,313,358),(148,358,343,388),(148,358,373,418),(148,358,403,478),(148,358,463,538)]
+        wall(meeting_wall)
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1427,7 +549,9 @@ while run:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
     elif goentry == True:
-        entry()
+        wall_entry = [(538,1280,0,92),(1213,1280,0,720),(538,1280,512,720),(0,493,512,720),(478,538,617,720),(0,43,242,720),(0,493,0,92),(583,1183,152,497),(53,433,152,497)\
+            ,(538,733,0,122),(928,1280,0,122),(298,493,0,122),(0,178,0,122),(178,298,0,107),(718,898,0,107)]
+        wall(wall_entry)
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1452,7 +576,7 @@ while run:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
     elif gohalls == True:
-        halls()
+        wall()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1476,7 +600,7 @@ while run:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
     elif gowestgar == True:
-        westgar()
+        wall()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1495,7 +619,7 @@ while run:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
     elif gowestcor_1 == True:
-        westcor()
+        wall()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1522,7 +646,7 @@ while run:
             win.blit(bg ,(-28, rel_y-bg_height))
 #------------------------------------
     elif gowestcor_2 == True:
-        westcor()
+        wall()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1541,7 +665,7 @@ while run:
             win.blit(bg ,(-28, -13))
 #------------------------------------
     elif gowestfor == True:
-        westfor()
+        wall()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1562,7 +686,7 @@ while run:
             win.blit(bg ,(rel_x-bg_width, -58))
 #------------------------------------
     elif goforest == True:
-        forest()
+        wall()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1586,7 +710,7 @@ while run:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #------------------------------------
     elif goeastfor == True:
-        eastfor()
+        wall()
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -1607,7 +731,7 @@ while run:
             win.blit(bg ,(rel_x-bg_width, -58))
 #---------------------------------------------------------------------------
     
-    print(X, Y)
+    # print(X, Y)
     redrawGameWindow()
     pygame.display.update()
 
