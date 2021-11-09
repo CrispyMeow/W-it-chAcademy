@@ -86,13 +86,14 @@ avilia_b = readvar('front.txt', 'broom')
 FRONTANIM = False
 
 book_img = readvar('front.txt', 'map')
-BOOK_ANIM = 0
-OPENBOOK = False
-NEXTPAGE = False
-CLOSEBOOK = False
-BOOK_MAP = True
-BOOK_INVEN = False
-BOOK_MENU = False
+book_anim = 0
+open_book = False
+nextpage = False
+backpage = False
+closebook = False
+book_map = True
+book_inven = False
+book_menu = False
 
 for i in range(9):
     walkr[i] = pygame.transform.scale(walkr[i], (int(width*0.07), int(height*0.13)))
@@ -269,7 +270,7 @@ def wall(wall=[(0,0,0,0)]):
     global PLAYER_RADIUS
     global PLAYER_POSITION_X
     global PLAYER_POSITION_Y
-    if keys[pygame.K_a] and X > vel and OPENBOOK == False:
+    if keys[pygame.K_a] and X > vel and open_book == False:
         for i,j,k,l in wall:
             if i < X < j and k < Y < l-15:
                 adam = 0
@@ -282,7 +283,7 @@ def wall(wall=[(0,0,0,0)]):
         UP = False
         DOWN = False
         CHECK = 'LEFT'
-    elif keys[pygame.K_d] and OPENBOOK == False:
+    elif keys[pygame.K_d] and open_book == False:
         for i,j,k,l in wall:
             if i-15 < X < j-15 and k < Y < l-15:
                 adam = 0
@@ -295,7 +296,7 @@ def wall(wall=[(0,0,0,0)]):
         UP = False
         DOWN = False
         CHECK = 'RIGHT'
-    elif keys[pygame.K_s] and OPENBOOK == False:
+    elif keys[pygame.K_s] and open_book == False:
         for i,j,k,l in wall:
             if i < X < j-15 and k-15 < Y < l-15:
                 adam = 0
@@ -308,7 +309,7 @@ def wall(wall=[(0,0,0,0)]):
         UP = False
         DOWN = True
         CHECK = 'DOWN'
-    elif keys[pygame.K_w] and OPENBOOK == False:
+    elif keys[pygame.K_w] and open_book == False:
         for i,j,k,l in wall:
             if i < X < j-15 and k < Y < l:
                 adam = 0
@@ -339,7 +340,7 @@ while run:
         if keys[pygame.K_ESCAPE]:
             run = False
         if keys[pygame.K_e] and PLAY:
-            OPENBOOK = True
+            open_book = True
 #--------------hallway---------------
     if PLAY:
         if gohallway == True: #HALLWAY
@@ -868,33 +869,53 @@ while run:
 #---------------------------------------------------------------------------
         redrawGameWindow()
 
-    if OPENBOOK and PLAY:
+    if open_book and PLAY:
 
-        if BOOK_MAP:
-            BOOK_ANIM += 1
-            if BOOK_ANIM+1 >= 9:BOOK_ANIM = 9
+        if book_map:
+            book_anim += 1
+            if book_anim+1 >= 9:
+                book_anim = 9
             if keys[pygame.K_d]:
-                NEXTPAGE = True
-                BOOK_INVEN = True
-                BOOK_MAP = False
+                nextpage, book_inven, book_map = True, True, False
 
-        if NEXTPAGE and BOOK_INVEN:
-            if BOOK_ANIM != 19:
-                BOOK_ANIM += 1
-            if BOOK_ANIM == 19:NEXTPAGE = False
+        if nextpage and book_inven:
+            if book_anim != 19:
+                book_anim += 1
+            if book_anim == 19:
+                nextpage = False
 
-        elif BOOK_INVEN:
+        elif book_inven:
             if keys[pygame.K_d]:
-                NEXTPAGE = True
-                BOOK_MENU = True
-                BOOK_INVEN = False
-                
-        if NEXTPAGE and BOOK_MENU:
-            if BOOK_ANIM != 29:
-                BOOK_ANIM += 1
+                nextpage, book_menu, book_inven = True, True, False
+            if keys[pygame.K_a]:
+                backpage = True
+            if backpage:
+                if book_anim != 9:book_anim -= 1
+                if book_anim == 9:book_map, book_inven, backpage = True, False, False
 
-        print(NEXTPAGE, BOOK_ANIM)
-        win.blit(book_img[BOOK_ANIM], (0, 0))
+        if nextpage and book_menu:
+            if book_anim != 29:book_anim += 1
+            if book_anim == 29:nextpage = False
+            
+        elif book_menu:
+            if keys[pygame.K_a]:
+                backpage = True
+            if backpage:
+                if book_anim != 19:
+                    book_anim -= 1
+                if book_anim == 19:
+                    book_inven, book_menu, backpage = True, False, False
+                    
+        if keys[pygame.K_e] and (book_anim == 9 or book_anim == 19 or book_anim == 29):
+            backpage, book_map, book_inven, book_menu = True, False, False, False
+            
+        if backpage and not book_map and not book_inven and not book_menu:
+            book_anim -= 1
+            if book_anim == 0:
+                backpage, open_book, book_map = False, False, True
+        
+        print(nextpage, book_anim)
+        win.blit(book_img[book_anim], (0, 0))
 
     if PLAY == False:
         frontgame()
