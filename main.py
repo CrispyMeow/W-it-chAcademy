@@ -388,7 +388,7 @@ while run:
             win.blit(bg ,(-28, rel_y-bg_height))
 #--------------eastcor2--------------
     elif goeastcor_2 == True:
-        wall()
+        wall(walls["eastcor2"])
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -413,7 +413,7 @@ while run:
             win.blit(bg ,(-28, -13))
 #--------------eastgarden------------
     elif goeastgar == True:
-        wall()
+        wall(walls["eastgar"])
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -727,7 +727,7 @@ while run:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #-------------eastforest--------------
     elif goeastfor == True:
-        wall()
+        wall(walls["eastforest"])
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
