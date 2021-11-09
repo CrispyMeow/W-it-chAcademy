@@ -544,6 +544,7 @@ while run:
         if X <= 13:
             bg = pygame.image.load("sprite/halls.jpg")
             X = 1153
+            Y = 178
             goentry = False
             gohalls = True
         elif Y <= 13:
@@ -562,7 +563,7 @@ while run:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #----------------hall----------------
     elif gohalls == True:
-        wall()
+        wall(walls["hall"])
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -586,7 +587,7 @@ while run:
             win.blit(bg ,(rel_x-bg_width, rel_y-bg_height))
 #-------------westgarden-------------
     elif gowestgar == True:
-        wall()
+        wall(walls["westgar"])
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -680,7 +681,7 @@ while run:
                 CHECK = "LEFT"
 #-------------westforest-------------
     elif gowestfor == True:
-        wall()
+        wall(walls["westfor"])
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
@@ -693,6 +694,7 @@ while run:
         elif X >= 1213:
             bg = pygame.image.load("sprite/forest.jpg")
             X = 28
+            Y = 418
             gowestfor = False
             goforest = True
         elif X >= 583:
@@ -701,7 +703,7 @@ while run:
             win.blit(bg ,(rel_x-bg_width, -58))
 #--------------forest----------------
     elif goforest == True:
-        wall()
+        wall(walls["forest"])
         rel_x = -X % bg_width
         rel_y = -Y % bg_height
 
